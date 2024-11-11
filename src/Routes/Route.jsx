@@ -10,6 +10,10 @@ import { singleRooms } from "../Apis/Room";
 import DashboardLayout from "../Layout/DashboardLayout";
 import AddRoom from "../Pages/Dashboard/AddRoom";
 import MyListing from "../Components/Dashboard/MyListing";
+import MyBookings from "../Components/Dashboard/MyBookings";
+import HostRoute from "./HostRoute";
+import AdminRoute from "./AdminRoute";
+import ManageUsers from "../Components/Dashboard/ManageUsers";
 
 const router = createBrowserRouter([
   {
@@ -41,19 +45,39 @@ const router = createBrowserRouter([
       </PrivetRoute>
     ),
     children: [
+      // admin menus ------------>
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <ManageUsers />
+          </AdminRoute>
+        ),
+      },
+
+      // hot menus-------->
       {
         path: "add-room",
         element: (
-          <PrivetRoute>
+          <HostRoute>
             <AddRoom />
-          </PrivetRoute>
+          </HostRoute>
         ),
       },
       {
         path: "my-listing",
         element: (
+          <HostRoute>
+            <MyListing />
+          </HostRoute>
+        ),
+      },
+      // Guest menus-------->
+      {
+        path: "my-bookings",
+        element: (
           <PrivetRoute>
-         <MyListing/>
+            <MyBookings />
           </PrivetRoute>
         ),
       },
