@@ -3,19 +3,53 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import placeholder from "../assets/placeholder.jpg";
+import useRole from "../Hooks/useRole";
+import HostModal from "./Modal/HostRequestModal";
+import toast from "react-hot-toast";
+import { becomeHost } from "../Apis/auth";
 
 const MenuDropdown = () => {
+  const [role] = useRole();
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = useAuth();
+  const [isModalOpen, setModalOpen] = useState(false);
 
+  const closeModal=()=>{
+    setModalOpen(false);
+  }
+
+ const modalHandler = async () => {
+   // req to this host
+   try {
+     const data = await becomeHost(user?.email);
+     console.log(data);
+     if (data?.modifiedCount > 0) {
+       toast.success("Successfully! Please wait for admin confirmation");
+     } else {
+       toast.success("Please!! Wait For Admin Approval 👊");
+     }
+   } catch (err) {
+     console.log(err);
+   } finally {
+     setIsOpen(false);
+   }
+ };
   return (
     <div className="relative">
       <div className="flex flex-row items-center gap-3">
         {/* Become A Host btn */}
         <div className="hidden md:block">
-          <button className="disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition">
-            {user?.displayName}
-          </button>
+          {!user ||
+            !role ||
+            (role === "guest" && (
+              <button
+                onClick={() => setModalOpen(true)}
+                disabled={!user}
+                className="disabled:cursor-not-allowed cursor-pointer hover:bg-neutral-100 py-3 px-4 text-sm font-semibold rounded-full  transition"
+              >
+                Host Your Room
+              </button>
+            ))}
         </div>
         {/* Dropdown btn */}
         <div
@@ -54,7 +88,8 @@ const MenuDropdown = () => {
                 >
                   Dashboard
                 </Link>
-                <button onClick={logOut}
+                <button
+                  onClick={logOut}
                   to="/login"
                   className="px-4 py-3 hover:bg-neutral-100 transition font-semibold"
                 >
@@ -80,6 +115,10 @@ const MenuDropdown = () => {
           </div>
         </div>
       )}
+      <HostModal
+        closeModal={closeModal}
+        modalHandler={modalHandler}
+        isOpen={isModalOpen} />
     </div>
   );
 };

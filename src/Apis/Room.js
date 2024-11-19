@@ -32,3 +32,14 @@ export const addRoom = async (roomData) => {
 };
 
 
+
+export const updateRoom = async (updatedData, id) => {
+  const { data } = await axiosSecure.put(`/room/${id}`, updatedData);
+  return data;
+};
+
+
+export const deleteRoom = async id => {
+  const { data } = await axiosSecure.delete(`/room/${id}`);
+  return data;
+};

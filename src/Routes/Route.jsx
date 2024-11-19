@@ -14,6 +14,13 @@ import MyBookings from "../Components/Dashboard/MyBookings";
 import HostRoute from "./HostRoute";
 import AdminRoute from "./AdminRoute";
 import ManageUsers from "../Components/Dashboard/ManageUsers";
+import Profile from "../Components/Dashboard/Profile";
+import ManageBookings from "../Components/Dashboard/ManageBookings";
+import AdminStatistics from "../Components/Statistics/AdminStatistics";
+import HostStatistics from "../Components/Statistics/HostStatistics";
+import GuestStatistics from "../Components/Statistics/GuestStatistics";
+import useRole from "../Hooks/useRole";
+// import Statistics from "../Components/Statistics/Statistics";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +52,19 @@ const router = createBrowserRouter([
       </PrivetRoute>
     ),
     children: [
+      { index: true,
+         element: <RoleBasedStatistics /> },
+
+      // statictisc ---------->
+      {
+        path: "profile",
+        element: (
+          <PrivetRoute>
+            <Profile />
+          </PrivetRoute>
+        ),
+      },
+
       // admin menus ------------>
       {
         path: "manage-users",
@@ -54,13 +74,39 @@ const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+        path: "/dashboard",
+        element: (
+          <AdminRoute>
+            <AdminStatistics />
+          </AdminRoute>
+        ),
+      },
 
-      // hot menus-------->
+      // host menus-------->
+
+      {
+        path: "statistics",
+        element: (
+          <HostRoute>
+            <HostStatistics />
+          </HostRoute>
+        ),
+      },
+
       {
         path: "add-room",
         element: (
           <HostRoute>
             <AddRoom />
+          </HostRoute>
+        ),
+      },
+      {
+        path: "manage-bookings",
+        element: (
+          <HostRoute>
+            <ManageBookings />
           </HostRoute>
         ),
       },
@@ -94,5 +140,19 @@ const router = createBrowserRouter([
     element: <SignUp />,
   },
 ]);
+
+
+
+ function RoleBasedStatistics(){
+  const [role]=useRole();
+
+  if(role ==="admin"){
+return <AdminStatistics/>
+  }
+  else if (role === "host") {
+     return <HostStatistics />;
+   }
+     return <GuestStatistics />;
+}
 
 export default router;

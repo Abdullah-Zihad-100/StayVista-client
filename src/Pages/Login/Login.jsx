@@ -40,8 +40,8 @@ const Login = () => {
       console.log(dbResponse);
       //5 get token
       await GetToken(result?.user?.email);
-      navigate(location?.state?.from?.pathname);
       toast.success("Login Successfull");
+      navigate(from);
     } catch (err) {
       console.log(err);
       toast.error(err?.message);

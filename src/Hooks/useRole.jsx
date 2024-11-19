@@ -18,6 +18,7 @@ const useRole = () => {
 //   }, [user]);
 //   return [role, loading];
 
+
 const {data: role ,isLoading}=useQuery({
   enabled: !loading &&  !!user?.email,
   queryKey:["role"],

@@ -66,15 +66,11 @@ const Sidebar = () => {
             {/* If a user is host */}
             {role === "host" && <ToggleBtn toggleHandler={toggleHandler} />}
             <nav>
-              <MenuItem
-                icon={BsGraphUp}
-                label="Statistics"
-                address="/dashboard"
-              />
+            
+              {/* Host Menu Items */}
               {role === "guest" && <GuestMenu />}
               {role === "host" ? toggle ? <HostMenu /> : <GuestMenu /> : ""}
               {role === "admin" && <AdminMenu />}
-              {/* Menu Items */}
             </nav>
           </div>
         </div>
